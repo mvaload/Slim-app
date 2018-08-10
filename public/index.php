@@ -25,4 +25,11 @@ $app->post('/users', function ($request, $response) {
     return $response;
 });
 
+$app->get('/courses/{id}', function ($request, $response, array $args) {
+    $id = $args['id'];
+    $response->write("Course id: {$id}");
+
+    return $response;
+});
+
 $app->run();
