@@ -1,0 +1,6 @@
+<?php foreach ($users as $user): ?>
+  <div>
+    <a href="/users/<?= $user['id'] ?>"><?= $user['firstName'] ?></a>
+  </div>
+<?php endforeach ?>
+<a href="?page=<?= $page < 2 ? 1 : $page - 1 ?>">Prev</a> <a href="?page=<?= $page + 1 ?>">Next</a>
