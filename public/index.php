@@ -10,14 +10,17 @@ $configuration = [
 
 $app = new \Slim\App($configuration);
 
+$container = $app->getContainer();
+$container['renderer'] = new \Slim\Views\PhpRenderer(__DIR__ . '/../templates');
+
 $app->get('/', function ($request, $response) {
     $response->write('Welcome to Slim!');
     return $response;
 });
 
-$app->get('/users', function ($request, $response) {
-    $response->write('GET /users');
-    return $response;
+$app->get('/users/{id}', function ($request, $response, $args) {
+    $params = ['id' => $args['id']];
+    return $this->renderer->render($response, 'users/show.phtml', $parems);
 });
 
 $app->post('/users', function ($request, $response) {
