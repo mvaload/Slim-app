@@ -15,6 +15,7 @@
       "guzzlehttp/guzzle": "*",
       "tightenco/collect": "*",
       "slim/php-view": "*",
-      "fzaninotto/faker": "^1.8"
+      "fzaninotto/faker": "^1.8",
+      "danielstjules/stringy": "^3.1"
     }
 }
