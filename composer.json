@@ -1,4 +1,10 @@
 {
+    "authors": [
+        {
+            "name": "Moiseenko Vladimir",
+            "email": "mvaload@gmail.com"
+        }
+    ],
     "autoload": {
       "psr-4": {"App\\": "src/"},
       "files": [
