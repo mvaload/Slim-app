@@ -5,7 +5,7 @@ namespace App;
 require __DIR__ . '/../vendor/autoload.php';
 
 use DI\Container;
-use Slim\App;
+use Slim\Factory\AppFactory;
 use Slim\Views\PhpRenderer;
 use function Stringy\create as s;
 
@@ -13,21 +13,18 @@ $users = Generator::generate(100);
 
 $repo = new Repository();
 
-$configuration = [
-    'settings' => [
-        'displayErrorDetails' => true,
-    ],
-];
-
-$app = new App($configuration);
-
 $container = new Container();
 $container->set('renderer', function () {
     return new PhpRenderer(__DIR__ . '/../templates');
 });
 
+AppFactory::setContainer($container);
+$app = AppFactory::create();
+$app->addErrorMiddleware(true, true, true);
+
+
 $app->get('/', function ($request, $response) {
-    return $this->renderer->render($response, 'index.phtml');
+    return $this->get('renderer')->render($response, 'index.phtml');
 });
 
 $app->get('/users', function ($request, $response) use ($users) {
@@ -40,7 +37,7 @@ $app->get('/users', function ($request, $response) use ($users) {
         'users' => $sliceOfUsers,
         'page' => $page
     ];
-    return $this->renderer->render($response, 'users/index.phtml', $params);
+    return $this->get('renderer')->render($response, 'users/index.phtml', $params);
 });
 
 $app->get('/courses/new', function ($request, $response) use ($repo) {
@@ -48,7 +45,7 @@ $app->get('/courses/new', function ($request, $response) use ($repo) {
         'course' => [],
         'errors' => []
     ];
-    return $this->renderer->render($response, 'courses/new.phtml', $params);
+    return $this->get('renderer')->render($response, 'courses/new.phtml', $params);
 });
 
 $app->post('/courses', function ($request, $response) use ($repo) {
@@ -67,7 +64,7 @@ $app->post('/courses', function ($request, $response) use ($repo) {
         'errors' => $errors
     ];
 
-    return $this->renderer->render($response, 'courses/new.phtml', $params);
+    return $this->get('renderer')->render($response, 'courses/new.phtml', $params);
 });
 
 $app->get('/users/{id}', function ($request, $response, $args) use ($users) {
@@ -76,7 +73,7 @@ $app->get('/users/{id}', function ($request, $response, $args) use ($users) {
         return $user['id'] == $id;
     });
     $params = ['user' => $user];
-    return $this->renderer->render($response, 'users/show.phtml', $params);
+    return $this->get('renderer')->render($response, 'users/show.phtml', $params);
 });
 
 $app->get('/companies/{id}', function ($request, $response, $args) use ($companies) {
