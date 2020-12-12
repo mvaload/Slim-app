@@ -4,6 +4,8 @@ namespace App;
 
 require __DIR__ . '/../vendor/autoload.php';
 
+use Slim\App;
+use Slim\Views\PhpRenderer;
 use function Stringy\create as s;
 
 $users = Generator::generate(100);
@@ -16,12 +18,12 @@ $configuration = [
     ],
 ];
 
-$app = new \Slim\App($configuration);
+$app = new App($configuration);
 
 $container = $app->getContainer();
-$container['renderer'] = new \Slim\Views\PhpRenderer(__DIR__ . '/../templates');
+$container['renderer'] = new PhpRenderer(__DIR__ . '/../templates');
 
-$app->get('/', function ($request, $response) {
+$app->get('/', function ($response) {
     return $this->renderer->render($response, 'index.phtml');
 });
 
