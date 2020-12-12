@@ -4,6 +4,7 @@ namespace App;
 
 require __DIR__ . '/../vendor/autoload.php';
 
+use DI\Container;
 use Slim\App;
 use Slim\Views\PhpRenderer;
 use function Stringy\create as s;
@@ -20,10 +21,12 @@ $configuration = [
 
 $app = new App($configuration);
 
-$container = $app->getContainer();
-$container['renderer'] = new PhpRenderer(__DIR__ . '/../templates');
+$container = new Container();
+$container->set('renderer', function () {
+    return new PhpRenderer(__DIR__ . '/../templates');
+});
 
-$app->get('/', function ($response) {
+$app->get('/', function ($request, $response) {
     return $this->renderer->render($response, 'index.phtml');
 });
 
